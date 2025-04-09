@@ -1,0 +1,36 @@
+<h2>Login</h2>
+
+<!-- Show Django messages (like general errors) -->
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      {% if 'error' in message.tags %}
+        <li style="color: red;">{{ message }}</li>
+      {% else %}
+        <li style="color: green;">{{ message }}</li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<!-- Show field-specific errors -->
+{% if form.errors %}
+  <ul style="color: red;">
+    {% for field in form %}
+      {% for error in field.errors %}
+        <li>{{ field.label }}: {{ error }}</li>
+      {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+      <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
+{% endif %}
+
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Login</button>
+</form>
+
+<p><a href="{% url 'register' %}">Don't have an account? Register</a></p>

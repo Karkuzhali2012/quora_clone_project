@@ -1,0 +1,24 @@
+<h2>Welcome, {{ user.username }}!</h2>
+<a href="{% url 'post_question' %}">Ask a Question</a> |
+<a href="{% url 'logout' %}">Logout</a>
+
+<hr>
+{% for question in questions %}
+  <h3>{{ question.title }}</h3>
+  <p>{{ question.description }}</p>
+  <p>Asked by: {{ question.user.username }}</p>
+  <a href="{% url 'answer_question' question.id %}">Answer</a>
+
+  <hr>
+  {% for answer in question.answer_set.all %}
+    <p><strong>{{ answer.user.username }}</strong>: {{ answer.content }}</p>
+    <form method="post" action="{% url 'like_answer' answer.id %}">{% csrf_token %}
+      {% if user in answer.likes.all %}
+        <button disabled>You liked this ({{ answer.likes.count }})</button>
+      {% else %}
+        <button type="submit">Like ({{ answer.likes.count }})</button>
+      {% endif %}
+    </form>
+  {% endfor %}
+  <hr>
+{% endfor %}
